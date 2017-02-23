@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <link rel="stylesheet" href="css/touch.css" />
+
+</head>
+<body class="experiment">
+    <div class="wrapper">
+
+<article class="viewport">
+    <section class="cube">
+        <div>
+           <img width="360" height="328" src="video/duck.jpg" >
+                      <p> This is 1st surface </p>
+        </div>
+
+        <div> <!-- Start for 2nd surface -->
+
+            <p> Please input a string into the following bracket sent to server</p>
+
+            <input id='userInput' size=38> <button onClick='userSubmit()'>Submit</button>
+
+            <p id='clientSend'></p>
+
+            <p id='serverReply'></p>
+
+            <br><br>
+            <p> This is 2nd surface </p>
+
+        <script type='text/javascript'>
+
+            var ajaxRequest;
+            var hostName;
+
+            function userSubmit() {
+                var UI=document.getElementById('userInput').value;
+                document.getElementById('clientSend').innerHTML='Client sent: '+UI;
+
+                try{
+                    ajaxRequest = new XMLHttpRequest();
+                }catch (e){
+                    alert("Your browser broke!");
+                    document.getElementById('serverReply').innerHTML='Your browser broke! ';
+                    return false;
+                }
+                hostName = location.hostname;
+                var localURL = 'http://' + hostName +':8080/sample/hello' + "?clientInput=" + UI;
+	<!--ajaxRequest.open("GET", "http://192.168.0.3:8080/sample/hello", true); -->
+                ajaxRequest.open("GET", localURL, true); 
+ 
+                ajaxRequest.onreadystatechange = setCallback;
+                ajaxRequest.send(null); 
+
+            }
+        function setCallback()
+        {
+        console.log("State updated by server[%d, %d]", ajaxRequest.readyState, ajaxRequest.status);
+
+            if(ajaxRequest.readyState == 4)
+            {
+                if(ajaxRequest.status == 200)
+                {
+                    var type = ajaxRequest.getResponseHeader("Content-Type");
+                    if (type.match(/^text/))
+                        {
+                           var reText = ajaxRequest.responseText;
+                           reText = reText.replace(/\r/g, ' ');
+                           document.getElementById('serverReply').innerHTML = reText.replace(/\t/g, ' ');
+                        }
+                }
+            }
+        }           
+ 
+
+        </script>
+  
+
+        </div><!-- End of 2nd surface -->
+
+        <div>
+            <img width="360" height="328" src="video/dog.jpg" >
+                       <p> This is 3rd surface </p>
+
+       </div>
+        <div>
+           <img width="360" height="328" src="video/monky.jpg" >
+                      <p> This is 4th surface </p>
+        </div>
+        <div>
+           <img width="360" height="328" src="video/panda.jpg" >
+                      <p> This is 5th surface </p>
+        </div>
+        <div>
+           <img width="360" height="328" src="video/tiger.jpg" >
+           <p> This is 6th surface </p>
+        </div>
+    </section>
+</article>
+
+    </div><!-- end of div viewport  -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="js/touch.js"></script>
+</body>
+</html>
